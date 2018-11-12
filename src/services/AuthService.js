@@ -1,5 +1,5 @@
-import auth0 from 'auth0-js';
-import auth0Config from './auth0-variables';
+import auth0 from "auth0-js";
+import auth0Config from "./auth0-variables";
 
 const auth0Client = new auth0.WebAuth({
   domain: auth0Config.domain,
@@ -9,14 +9,24 @@ const auth0Client = new auth0.WebAuth({
   scope: auth0Config.scope
 });
 
+const getUser = function() {
+  const userInfo = JSON.parse(localStorage.getItem('user_info'));
+  return userInfo && new Date().getTime() < userInfo.expiresAt
+    ? userInfo
+    : null;
+};
+
 export const authService = {
   login,
   logout,
   handleAuthentication,
-  getUser,
+  getUserId,
+  getAccessToken,
   setReturnUrl,
   getReturnUrl
 };
+
+
 
 function login() {
   auth0Client.authorize();
@@ -24,8 +34,8 @@ function login() {
 
 function logout() {
   // Clear access token and ID token from local storage
-  localStorage.removeItem('user_info');
-  localStorage.removeItem('returnUrl');
+  localStorage.removeItem("user_info");
+  localStorage.removeItem("returnUrl");
 }
 
 function handleAuthentication() {
@@ -33,7 +43,7 @@ function handleAuthentication() {
     auth0Client.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         setSession(authResult).then(userInfo => {
-          resolve(userInfo);
+          resolve(userInfo.sub);
         });
       } else if (err) {
         logout();
@@ -48,25 +58,29 @@ function setSession(authResult) {
     const userInfo = {
       accessToken: authResult.accessToken,
       idToken: authResult.idToken,
-      expiresAt: authResult.expiresIn * 1000 + new Date().getTime()
+      expiresAt: authResult.expiresIn * 1000 + new Date().getTime(),
+      sub: authResult.idTokenPayload.sub
     };
-    localStorage.setItem('user_info', JSON.stringify(userInfo));
+    localStorage.setItem("user_info", JSON.stringify(userInfo));
 
     resolve(userInfo);
   });
 }
 
-function getUser() {
-  const userInfo = JSON.parse(localStorage.getItem('user_info'));
-  return userInfo && new Date().getTime() < userInfo.expiresAt
-    ? userInfo
-    : null;
+function getUserId() {
+  const userInfo = getUser();
+  return userInfo ? userInfo.sub : null;
+}
+
+function getAccessToken() {
+  const userInfo = getUser();
+  return userInfo ? userInfo.accessToken : null;
 }
 
 function setReturnUrl(value) {
-  localStorage.setItem('returnUrl', value);
+  localStorage.setItem("returnUrl", value);
 }
 
 function getReturnUrl() {
-  return localStorage.getItem('returnUrl');
+  return localStorage.getItem("returnUrl") || '/';
 }

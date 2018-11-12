@@ -1,10 +1,13 @@
 <template>
-  <div></div>
+  <div class=""></div>
 </template>
 
 <script>
 export default {
-  name: "RecipeList"
+  name: "RecipeList",
+  mounted() {
+    this.$store.dispatch("recipes/fetch");
+  }
 };
 </script>
 
