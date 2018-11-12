@@ -1,7 +1,7 @@
-import { authService } from './../../services/AuthService';
-import { router } from './../../router';
+import { authService } from '@/services/AuthService';
+import { router } from '@/router';
 
-const user = authService.getUser();
+const user = authService.getUserId();
 const state = user
   ? { status: { loggedIn: true }, user }
   : { status: {}, user: null };
@@ -11,23 +11,22 @@ const actions = {
     commit('loginRequest', user);
     authService.login();
   },
-  handleAuthenticationResponse({ dispatch, commit }) {
-    authService.handleAuthentication().then(
-      userInfo => {
-        commit('loginSuccess', userInfo);
-        router.push(authService.getReturnUrl());
-      },
-      error => {
-        commit('loginFailure', error);
-        // dispatch('alert/error', error, { root: true });
-        router.push('/');
-      }
-    );
+  async handleAuthenticationResponse({ dispatch, commit }) {
+    try {
+      const userInfo = await authService.handleAuthentication();
+      commit('loginSuccess', userInfo);
+      router.push({ path: authService.getReturnUrl() });
+    } catch (e) {
+      authService.logout();
+      commit('loginFailure', e);
+      router.push({ path: '/' });
+      dispatch('alert/error', error, { root: true });
+    }
   },
   logout({ commit }) {
     authService.logout();
     commit('logout');
-    router.push("/");
+    router.push('/');
   }
 };
 
@@ -39,7 +38,6 @@ const mutations = {
   loginSuccess(state, user) {
     state.status = { loggedIn: true };
     state.user = user;
-    console.log(state);
   },
   loginFailure(state) {
     state.status = {};
@@ -53,8 +51,11 @@ const mutations = {
 
 const getters = {
   getUser(state) {
-    return state.user && authService.getUser();
+    return state.user && authService.getUserId();
   },
+  getReturnUrl(state, getters) {
+    return getters['getUser'] && authService.getReturnUrl();
+  }
 };
 
 export default {

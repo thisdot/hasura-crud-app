@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   name: "AppNav",
@@ -50,12 +50,12 @@ export default {
     }
   },
   methods: {
-    ...mapGetters('account', { getUser: 'getUser' }),
+    ...mapGetters("account", { getUser: "getUser" }),
     logout() {
-      this.$store.dispatch('account/logout');
+      this.$store.dispatch("account/logout");
     },
     login() {
-      this.$store.dispatch('account/login');
+      this.$store.dispatch("account/login");
     }
   }
 };
