@@ -1,42 +1,42 @@
-import Vue from "vue";
-import Router from "vue-router";
-import store from "./../store";
-import { authService } from "./../services/AuthService";
+import Vue from 'vue';
+import Router from 'vue-router';
+import store from '@/store';
+import { authService } from '@/services/auth/AuthService';
 
-import Home from "./../home/Home.vue";
-import Callback from "./../auth/Callback.vue";
-import RecipeList from "./../recipes/RecipeList.vue";
-import CreateOrEditRecipe from "./../recipes/CreateOrEditRecipe.vue";
+import Home from '@/components/home/Home.vue';
+import Callback from '@/components/auth/Callback.vue';
+import RecipeList from '@/components/recipes/RecipeList.vue';
+import CreateOrEditRecipe from '@/components/recipes/CreateOrEditRecipe.vue';
 
 Vue.use(Router);
 
 export const router = new Router({
-  mode: "history",
+  mode: 'history',
   routes: [
     {
-      path: "/",
-      name: "home",
+      path: '/',
+      name: 'home',
       component: Home
     },
     {
-      path: "/callback",
-      name: "callback",
+      path: '/callback',
+      name: 'callback',
       component: Callback
     },
     {
-      path: "/recipes",
-      name: "recipes",
+      path: '/recipes',
+      name: 'recipes',
       component: RecipeList,
       children: [
         {
-          path: "/:recipeId",
-          name: "editRecipe",
+          path: '/:recipeId',
+          name: 'editRecipe',
           component: CreateOrEditRecipe
         }
       ]
     },
     // otherwise redirect to home
-    { path: "*", redirect: "/" }
+    { path: '*', redirect: '/' }
     // {
     //   path: "/about",
     //   name: "about",
@@ -51,14 +51,14 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/login", "/", "/home", "/callback"];
+  const publicPages = ['/login', '/', '/home', '/callback'];
   const authRequired = !publicPages.includes(to.path);
-  const loggedIn = store.getters["account/getUser"];
-  
-  if (authRequired && !loggedIn) {
-    authService.setReturnUrl(to.fullPath);
-    store.dispatch("account/login");
-  }
+  const loggedIn = store.getters['account/getUser'];
+
+  // if (authRequired && !loggedIn) {
+  //   authService.setReturnUrl(to.fullPath);
+  //   store.dispatch('account/login');
+  // }
 
   next();
 });

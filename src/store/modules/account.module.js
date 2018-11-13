@@ -1,4 +1,4 @@
-import { authService } from '@/services/AuthService';
+import { authService } from '@/services/auth/AuthService';
 import { router } from '@/router';
 
 const user = authService.getUserId();
