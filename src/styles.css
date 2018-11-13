@@ -8,6 +8,8 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 80px;
+    font-family: 'Open Sans', sans-serif;
+    color: #353535;
 }
 
 .footer {

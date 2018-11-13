@@ -2,21 +2,16 @@ import { router } from '@/router';
 import gqlClient from '@/apollo';
 import gql from 'graphql-tag';
 
+import { RECIPES_QUERY } from '@/queries';
+
 const state = {
-    recipes: []
+    all: []
 };
 
 const actions = {
     async fetch({ commit }) {
         const response = await gqlClient.query({
-            query: gql`
-                {
-                    recipe {
-                        id
-                        name
-                    }
-                }
-            `,
+          query: RECIPES_QUERY
         });
 
         commit("setRecipes", response.data.recipe);
@@ -25,7 +20,7 @@ const actions = {
 
 const mutations = {
     setRecipes(state, recipes) {
-        state = { recipes: recipes };
+        state.all = recipes;
     }
 };
 
