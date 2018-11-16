@@ -6,6 +6,7 @@
           <h2 class="text-center">Recipes</h2>
         </div>
       </div>
+      <Waiting v-if="isLoading" />
       <div class="row" v-for="(recipe, index) in recipes" :key="index">
         <div class="col-md-12 reset-padding">
           <div class="one-recipe">  
@@ -22,6 +23,9 @@
             <div class="recipe-calories">
               <span class="label">Calories: </span><span>{{ recipe.calories_per_serving   }}</span>
             </div>
+            <div class="recipe-time">
+              <span class="label">Time to prepare: </span><span>{{ recipe.time_to_prepare   }}</span>
+            </div>
           </div>
           </div>
         </div>
@@ -32,18 +36,25 @@
 
 <script>
 import { mapState } from 'vuex';
+import Waiting from '@/components/shared/Waiting.vue';
 
 export default {
   name: 'RecipeList',
+  components: {
+    Waiting
+  },
   computed: {
-    ...mapState('recipes', { recipes: 'all' })
+    ...mapState('recipes', { recipes: 'all', isLoading: 'isLoading' })
   },
   mounted() {
-    this.$store.dispatch('recipes/fetch');
+    this.$store.dispatch('recipes/findAll');
   },
   methods: {
     goToRecipe($event) {
-      console.log($event);
+      this.$router.push({
+        name: 'editRecipe',
+        params: { recipeId: +$event }
+      });
     }
   }
 };
@@ -52,10 +63,6 @@ export default {
 <style scoped>
 .content {
   margin-bottom: 50px;
-}
-h2,
-h3 {
-  font-family: 'Mate SC', serif;
 }
 .reset-padding {
   padding: 0 !important;
@@ -88,7 +95,8 @@ h3 {
   font-size: 0.8rem;
 }
 .recipe-body .recipe-servings,
-.recipe-body .recipe-calories {
+.recipe-body .recipe-calories,
+.recipe-body .recipe-time {
   padding: 10px;
 }
 .recipe-body span.label {
@@ -100,7 +108,8 @@ h3 {
     padding: 20px;
   }
   .recipe-body .recipe-servings,
-  .recipe-body .recipe-calories {
+  .recipe-body .recipe-calories,
+  .recipe-body .recipe-time {
     padding-right: 20px;
     padding-left: 20px;
   }

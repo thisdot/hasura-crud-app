@@ -12,6 +12,16 @@ body {
     color: #353535;
 }
 
+h1,
+h2,
+h3 {
+    font-family: 'Mate SC', serif;
+}
+
+hr.default {
+    border-top: 1ps solid #47294d;
+}
+
 .footer {
     position: absolute;
     bottom: 0;
@@ -38,4 +48,32 @@ body>div>.container {
 
 code {
     font-size: 80%;
+}
+
+i {
+    border: solid #373c42;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    margin: 0 5px;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
 }

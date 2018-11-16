@@ -6,7 +6,7 @@ import { authService } from '@/services/auth/AuthService';
 import Home from '@/components/home/Home.vue';
 import Callback from '@/components/auth/Callback.vue';
 import RecipeList from '@/components/recipes/RecipeList.vue';
-import CreateOrEditRecipe from '@/components/recipes/CreateOrEditRecipe.vue';
+import EditRecipe from '@/components/recipes/EditRecipe.vue';
 
 Vue.use(Router);
 
@@ -26,14 +26,12 @@ export const router = new Router({
     {
       path: '/recipes',
       name: 'recipes',
-      component: RecipeList,
-      children: [
-        {
-          path: '/:recipeId',
-          name: 'editRecipe',
-          component: CreateOrEditRecipe
-        }
-      ]
+      component: RecipeList
+    },
+    {
+      path: '/recipes/:recipeId',
+      name: 'editRecipe',
+      component: EditRecipe
     },
     // otherwise redirect to home
     { path: '*', redirect: '/' }
@@ -55,10 +53,10 @@ router.beforeEach((to, from, next) => {
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = store.getters['account/getUser'];
 
-  // if (authRequired && !loggedIn) {
-  //   authService.setReturnUrl(to.fullPath);
-  //   store.dispatch('account/login');
-  // }
+  if (authRequired && !loggedIn) {
+    authService.setReturnUrl(to.fullPath);
+    store.dispatch('account/login');
+  }
 
   next();
 });
