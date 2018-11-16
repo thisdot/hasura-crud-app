@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="">Yummy Food!</a>
+      <a class="navbar-brand" href="/">Yummy Food!</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -40,22 +40,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "AppNav",
+  name: 'AppNav',
   computed: {
     isLoggedIn() {
       return this.getUser();
     }
   },
   methods: {
-    ...mapGetters("account", { getUser: "getUser" }),
+    ...mapGetters('account', { getUser: 'getUser' }),
     logout() {
-      this.$store.dispatch("account/logout");
+      this.$store.dispatch('account/logout');
     },
     login() {
-      this.$store.dispatch("account/login");
+      this.$store.dispatch('account/login');
     }
   }
 };
