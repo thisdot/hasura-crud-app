@@ -51,7 +51,7 @@
                   </div>
                     <div class="form-group col-md-4">
                     <label for="number_of_servings" class="col-form-label">Servings</label>
-                    <input class="form-control" type="number" id="number_of_servnigs" v-model="recipe.number_of_servings"/>
+                    <input class="form-control" type="number" id="number_of_servings" v-model="recipe.number_of_servings"/>
                   </div>
                     <div class="form-group col-md-4">
                     <label for="calories_per_serving" class="col-form-label">Calories</label>
@@ -144,10 +144,42 @@ export default {
   },
   methods: {
     updatRecipe($event) {
-      console.log('Form submitted', $event);
+      const {
+        id,
+        name,
+        description,
+        instructions,
+        food_category_id,
+        number_of_servings,
+        time_to_prepare,
+        calories_per_serving,
+        source,
+        vegetarian
+      } = this.recipe;
+
+      this.$store.dispatch('recipes/updateRecipe', {
+        id,
+        name,
+        description,
+        instructions,
+        food_category_id,
+        number_of_servings,
+        time_to_prepare,
+        calories_per_serving
+      });
     },
     addIngredient($event) {
-      console.log('Add Ingredient', this.recipe_ingredient);
+      const payload = {
+        ...this.recipe_ingredient,
+        quantity: +this.recipe_ingredient.quantity,
+        recipe_id: this.recipe.id
+      };
+      this.$store.dispatch('recipes/InsertRecipeIngredient', payload);
+      this.recipe_ingredient = {
+        ingredient_id: '',
+        quantity: 0,
+        comments: ''
+      };
     }
   }
 };

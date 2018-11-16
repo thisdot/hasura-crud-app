@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { Waiting } from '@/components/shared/Waiting.vue';
+import Waiting from '@/components/shared/Waiting.vue';
 
 export default {
   name: 'callback',
