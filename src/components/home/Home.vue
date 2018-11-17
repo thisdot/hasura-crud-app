@@ -42,6 +42,7 @@
             <ol>
               <li>Allow the user to delete a Recipe</li>
               <li>Allow the user to create a new Recipe</li>
+              <li>Allow the user to delete a Recipe Ingredient</li>
               <li>Allow the user to list all Ingredients</li>
               <li>Allow the user to create an Ingredient</li>
               <li>Allow the user to edit  an Ingredient</li>
