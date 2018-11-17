@@ -40,7 +40,7 @@ export const RECIPE_QUERY = gql`
   }
 `;
 
-export const FOOD_CATEGORY_RECIPE = gql`
+export const FOOD_CATEGORY_RECIPE_QUERY = gql`
   query {
     food_category(order_by: { id: asc }) {
       id
@@ -49,7 +49,7 @@ export const FOOD_CATEGORY_RECIPE = gql`
   }
 `;
 
-export const INGREDIENTS = gql`
+export const INGREDIENTS_QUERY = gql`
   query {
     ingredient(order_by: { id: asc }) {
       id

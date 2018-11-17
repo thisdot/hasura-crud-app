@@ -5,8 +5,8 @@ import { authService } from '@/services/auth/AuthService';
 import {
   RECIPES_QUERY,
   RECIPE_QUERY,
-  FOOD_CATEGORY_RECIPE,
-  INGREDIENTS,
+  FOOD_CATEGORY_RECIPE_QUERY,
+  INGREDIENTS_QUERY,
   RECIPE_INGREDIENT_MUTATION,
   RECIPE_UPDATE_MUTATION
 } from '@/queries';
@@ -37,11 +37,13 @@ const actions = {
     commit('setRecipe', response.data.recipe[0]);
   },
   async fetchFoodCategoryList({ commit }) {
-    const response = await gqlClient.query({ query: FOOD_CATEGORY_RECIPE });
+    const response = await gqlClient.query({
+      query: FOOD_CATEGORY_RECIPE_QUERY
+    });
     commit('setFoodCategoryList', response.data.food_category);
   },
   async fetchIngredientList({ commit }) {
-    const response = await gqlClient.query({ query: INGREDIENTS });
+    const response = await gqlClient.query({ query: INGREDIENTS_QUERY });
     commit('setIngredientList', response.data.ingredient);
   },
   async InsertRecipeIngredient({ dispatch, commit }, recipeIngredient) {
