@@ -52,6 +52,7 @@
               <li>Allow the user to edit a Food Category</li>
               <li>Allow the user to delete a Food Category</li>
               <li>Add form validation to all forms above, including editing a Recipe</li>
+              <li>Refactor the Recipe-Ingredient Form to a separate Vue Component</li>
               <li>Enhance the UI experience</li>
               <li>And many other things</li>
             </ol>
