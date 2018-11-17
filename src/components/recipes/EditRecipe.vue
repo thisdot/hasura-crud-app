@@ -174,7 +174,7 @@ export default {
         quantity: +this.recipe_ingredient.quantity,
         recipe_id: this.recipe.id
       };
-      this.$store.dispatch('recipes/InsertRecipeIngredient', payload);
+      this.$store.dispatch('recipes/insertRecipeIngredient', payload);
       this.recipe_ingredient = {
         ingredient_id: '',
         quantity: 0,

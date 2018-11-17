@@ -46,7 +46,7 @@ const actions = {
     const response = await gqlClient.query({ query: INGREDIENTS_QUERY });
     commit('setIngredientList', response.data.ingredient);
   },
-  async InsertRecipeIngredient({ dispatch, commit }, recipeIngredient) {
+  async insertRecipeIngredient({ dispatch, commit }, recipeIngredient) {
     const response = await gqlClient.mutate({
       mutation: RECIPE_INGREDIENT_MUTATION,
       variables: {
