@@ -3,18 +3,17 @@
 </template>
 
 <script>
-import Waiting from '@/components/shared/Waiting.vue';
+import Waiting from "@/components/shared/Waiting.vue";
 
 export default {
-  name: 'callback',
+  name: "callback",
   components: {
     Waiting
   },
   mounted() {
-    this.$store.dispatch('account/handleAuthenticationResponse');
+    this.$store.dispatch("account/handleAuthenticationResponse");
   }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

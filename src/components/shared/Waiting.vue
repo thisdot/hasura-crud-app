@@ -109,7 +109,7 @@
 
 <script>
 export default {
-  name: 'Waiting'
+  name: "Waiting"
 };
 </script>
 

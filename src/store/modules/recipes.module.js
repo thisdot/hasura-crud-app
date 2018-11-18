@@ -4,7 +4,6 @@ import { authService } from '@/services/auth/AuthService';
 
 import {
   RECIPES_QUERY,
-  RECIPE_QUERY,
   FOOD_CATEGORY_RECIPE_QUERY,
   INGREDIENTS_QUERY,
   RECIPE_INGREDIENT_MUTATION,
@@ -13,7 +12,7 @@ import {
 
 let state = {
   all: [],
-  one: {},
+  one: '',
   foodCategoryList: [],
   ingredientList: [],
   isLoading: false
@@ -27,14 +26,9 @@ const actions = {
     });
     commit('setRecipeList', response.data.recipe);
   },
-  async findOne({ commit }, recipeId) {
-    commit('setLoading', true);
-
-    const response = await gqlClient.query({
-      query: RECIPE_QUERY,
-      variables: { recipe_id: recipeId }
-    });
-    commit('setRecipe', response.data.recipe[0]);
+  selectRecipe({ commit }, recipeId) {
+    commit('setRecipe', recipeId);
+    router.push({ name: 'editRecipe', params: { recipeId: recipeId } });
   },
   async fetchFoodCategoryList({ commit }) {
     const response = await gqlClient.query({
@@ -51,49 +45,10 @@ const actions = {
       mutation: RECIPE_INGREDIENT_MUTATION,
       variables: {
         ...recipeIngredient
-      },
-      update: (store, { data: { insert_recipe_ingredient } }) => {
-        // Read the data from our cache for this query.
-        try {
-          if (
-            !insert_recipe_ingredient.returning ||
-            !insert_recipe_ingredient.returning.length
-          ) {
-            return;
-          }
-
-          // get the currently being edited record
-          const one = store.readQuery({
-            query: RECIPE_QUERY,
-            variables: { recipe_id: recipeIngredient.recipe_id }
-          });
-
-          if (one && one.recipe && one.recipe.length) {
-            // get first object in array
-            const recipe = one.recipe[0];
-
-            // get first object return from response
-            const response = insert_recipe_ingredient.returning[0];
-
-            // update the Apollo Client cache
-            recipe.recipe_ingredients = recipe.recipe_ingredients || [];
-            recipe.recipe_ingredients.push({
-              id: response.id,
-              ingredient_id: response.ingredient_id,
-              recipe_id: response.recipe_id,
-              quantity: response.quantity,
-              comments: response.comments,
-              ingredient: response.ingredient
-            });
-
-            // notify the store of this new change
-            commit('setRecipe', recipe);
-          }
-        } catch (e) {
-          console.error(e);
-        }
       }
     });
+
+    dispatch('findAll');
   },
   async updateRecipe({ dispatch, commit }, recipe) {
     const response = await gqlClient.mutate({
@@ -101,42 +56,6 @@ const actions = {
       variables: {
         ...recipe,
         created_by: authService.getUserId()
-      },
-      update: (store, { data: { update_recipe } }) => {
-        // // Read the data from our cache for this query.
-        // try {
-        //   if (
-        //     !insert_recipe_ingredient.returning ||
-        //     !insert_recipe_ingredient.returning.length
-        //   ) {
-        //     return;
-        //   }
-        //   // get the currently being edited record
-        //   const one = store.readQuery({
-        //     query: RECIPE_QUERY,
-        //     variables: { recipe_id: recipeIngredient.recipe_id }
-        //   });
-        //   if (one && one.recipe && one.recipe.length) {
-        //     // get first object in array
-        //     const recipe = one.recipe[0];
-        //     // get first object return from response
-        //     const response = insert_recipe_ingredient.returning[0];
-        //     // update the Apollo Client cache
-        //     recipe.recipe_ingredients = recipe.recipe_ingredients || [];
-        //     recipe.recipe_ingredients.push({
-        //       id: response.id,
-        //       ingredient_id: response.ingredient_id,
-        //       recipe_id: response.recipe_id,
-        //       quantity: response.quantity,
-        //       comments: response.comments,
-        //       ingredient: response.ingredient
-        //     });
-        //     // notify the store of this new change
-        //     commit('setRecipe', recipe);
-        //  }
-        // } catch (e) {
-        //   console.error(e);
-        // }
       }
     });
 
@@ -149,9 +68,8 @@ const mutations = {
     state.all = [...recipeList];
     state.isLoading = false;
   },
-  setRecipe(state, recipe) {
-    state.one = { ...recipe };
-    state.isLoading = false;
+  setRecipe(state, recipeId) {
+    state.one = recipeId;
   },
   setFoodCategoryList(state, foodCategoryList) {
     state.foodCategoryList = [...foodCategoryList];
@@ -164,7 +82,11 @@ const mutations = {
   }
 };
 
-const getters = {};
+const getters = {
+  selectedRecipe(state) {
+    return state.all.find(item => item.id == state.one);
+  }
+};
 
 export default {
   namespaced: true,

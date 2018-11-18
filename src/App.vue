@@ -8,11 +8,11 @@
   </div>
 </template>
 <script>
-import AppNav from '@/components/shared/AppNav.vue';
-import AppFooter from '@/components/shared/AppFooter.vue';
+import AppNav from "@/components/shared/AppNav.vue";
+import AppFooter from "@/components/shared/AppFooter.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     AppNav,
     AppFooter

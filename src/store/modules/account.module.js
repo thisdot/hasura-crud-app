@@ -1,5 +1,5 @@
-import { authService } from '@/services/auth/AuthService';
-import { router } from '@/router';
+import { authService } from "@/services/auth/AuthService";
+import { router } from "@/router";
 
 const user = authService.getUserId();
 const state = user
@@ -8,25 +8,25 @@ const state = user
 
 const actions = {
   login({ commit }) {
-    commit('loginRequest', user);
+    commit("loginRequest", user);
     authService.login();
   },
   async handleAuthenticationResponse({ dispatch, commit }) {
     try {
       const userInfo = await authService.handleAuthentication();
-      commit('loginSuccess', userInfo);
+      commit("loginSuccess", userInfo);
       router.push({ path: authService.getReturnUrl() });
     } catch (e) {
       authService.logout();
-      commit('loginFailure', e);
-      router.push({ path: '/' });
-      dispatch('alert/error', error, { root: true });
+      commit("loginFailure", e);
+      router.push({ path: "/" });
+      dispatch("alert/error", error, { root: true });
     }
   },
   logout({ commit }) {
     authService.logout();
-    commit('logout');
-    router.push('/');
+    commit("logout");
+    router.push("/");
   }
 };
 
@@ -54,7 +54,7 @@ const getters = {
     return state.user && authService.getUserId();
   },
   getReturnUrl(state, getters) {
-    return getters['getUser'] && authService.getReturnUrl();
+    return getters["getUser"] && authService.getReturnUrl();
   }
 };
 

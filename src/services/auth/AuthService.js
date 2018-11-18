@@ -1,5 +1,5 @@
-import auth0 from 'auth0-js';
-import auth0Config from './auth0-variables';
+import auth0 from "auth0-js";
+import auth0Config from "./auth0-variables";
 
 const auth0Client = new auth0.WebAuth({
   domain: auth0Config.domain,
@@ -10,7 +10,7 @@ const auth0Client = new auth0.WebAuth({
 });
 
 const getUser = function() {
-  const userInfo = JSON.parse(localStorage.getItem('user_info'));
+  const userInfo = JSON.parse(localStorage.getItem("user_info"));
   return userInfo && new Date().getTime() < userInfo.expiresAt
     ? userInfo
     : null;
@@ -32,8 +32,8 @@ function login() {
 
 function logout() {
   // Clear access token and ID token from local storage
-  localStorage.removeItem('user_info');
-  localStorage.removeItem('returnUrl');
+  localStorage.removeItem("user_info");
+  localStorage.removeItem("returnUrl");
 }
 
 function handleAuthentication() {
@@ -59,7 +59,7 @@ function setSession(authResult) {
       expiresAt: authResult.expiresIn * 1000 + new Date().getTime(),
       sub: authResult.idTokenPayload.sub
     };
-    localStorage.setItem('user_info', JSON.stringify(userInfo));
+    localStorage.setItem("user_info", JSON.stringify(userInfo));
 
     resolve(userInfo);
   });
@@ -76,9 +76,9 @@ function getAccessToken() {
 }
 
 function setReturnUrl(value) {
-  localStorage.setItem('returnUrl', value);
+  localStorage.setItem("returnUrl", value);
 }
 
 function getReturnUrl() {
-  return localStorage.getItem('returnUrl') || '/';
+  return localStorage.getItem("returnUrl") || "/";
 }

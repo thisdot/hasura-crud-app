@@ -6,25 +6,16 @@ export const RECIPES_QUERY = gql`
       id
       name
       description
-      time_to_prepare
-      number_of_servings
-      calories_per_serving
-    }
-  }
-`;
-
-export const RECIPE_QUERY = gql`
-  query($recipe_id: Int!) {
-    recipe(where: { id: { _eq: $recipe_id } }) {
-      id
-      name
-      description
       instructions
       number_of_servings
       vegetarian
       calories_per_serving
       source
       food_category_id
+      food_category {
+        id
+        name
+      }
       created_by
       time_to_prepare
       recipe_ingredients {
@@ -119,12 +110,26 @@ export const RECIPE_UPDATE_MUTATION = gql`
         id
         name
         description
-        time_to_prepare
+        instructions
         number_of_servings
+        vegetarian
         calories_per_serving
+        source
+        food_category_id
         food_category {
           id
           name
+        }
+        created_by
+        time_to_prepare
+        recipe_ingredients {
+          id
+          ingredient {
+            id
+            name
+          }
+          quantity
+          comments
         }
       }
     }

@@ -2,36 +2,37 @@
   <div class="recipes">
     <div class="container">
       <div class="row content">
-        <div class="col-md-12">
-          <h2 class="text-center">Recipes</h2>
-        </div>
+        <div class="col-md-12"><h2 class="text-center">Recipes</h2></div>
       </div>
       <Waiting v-if="isLoading" />
       <div class="row" v-for="(recipe, index) in recipes" :key="index">
         <div class="col-md-12 reset-padding">
-          <div class="one-recipe">  
-          <div class="recipe-header">
-            <div class="recipe-title" @click="goToRecipe(recipe.id)">
-              <h3>{{ recipe.name }}</h3>
+          <div class="one-recipe">
+            <div class="recipe-header">
+              <div class="recipe-title" @click="goToRecipe(recipe.id);">
+                <h3>{{ recipe.name }}</h3>
+              </div>
+              <p class="recipe-description">{{ recipe.description }}</p>
             </div>
-            <p class="recipe-description">{{ recipe.description }}</p>
-          </div>
-          <div class="recipe-body">
-            <div class="recipe-servings">
-              <span class="label">Servings: </span><span>{{ recipe.number_of_servings }}</span>
+            <div class="recipe-body">
+              <div class="recipe-servings">
+                <span class="label">Servings: </span
+                ><span>{{ recipe.number_of_servings }}</span>
+              </div>
+              <div class="recipe-calories">
+                <span class="label">Calories: </span
+                ><span>{{ recipe.calories_per_serving }}</span>
+              </div>
+              <div class="recipe-time">
+                <span class="label">Time to prepare: </span
+                ><span>{{ recipe.time_to_prepare }}</span>
+              </div>
             </div>
-            <div class="recipe-calories">
-              <span class="label">Calories: </span><span>{{ recipe.calories_per_serving   }}</span>
-            </div>
-            <div class="recipe-time">
-              <span class="label">Time to prepare: </span><span>{{ recipe.time_to_prepare   }}</span>
-            </div>
-          </div>
           </div>
         </div>
       </div>
     </div>
-  </div>  	
+  </div>
 </template>
 
 <script>
@@ -51,10 +52,7 @@ export default {
   },
   methods: {
     goToRecipe($event) {
-      this.$router.push({
-        name: 'editRecipe',
-        params: { recipeId: +$event }
-      });
+      this.$store.dispatch('recipes/selectRecipe', +$event);
     }
   }
 };
